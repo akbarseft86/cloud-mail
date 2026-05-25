@@ -73,12 +73,8 @@ jobs:
             exit 1
           fi
           
-        if ! echo "$DOMAIN" | jq -e . > /dev/null 2>&1; then
-          DOMAIN="[\"$DOMAIN\"]"
-        fi
-        if ! jq -e 'type == "array"' <<< "$DOMAIN" ; then
-          echo "❌ DOMAIN variable must be a JSON array (e.g., [\"example.com\"])."
-          exit 1
+        if [[ "$DOMAIN" != [* ]]; then
+          DOMAIN=$(printf '[%s]' "$DOMAIN")
         fi
           
           if [ -z "$ADMIN" ]; then
